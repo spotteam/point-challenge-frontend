@@ -1,6 +1,7 @@
 
 import React, { useState } from "react";
 import PropTypes from 'prop-types';
+import TextareaAutosize from 'react-textarea-autosize';
 
 import { ReactComponent as TrashIcon } from '../../assets/noun_Trash_3775172.svg';
 import { ReactComponent as EditIcon } from '../../assets/noun_note_3774598.svg';
@@ -26,9 +27,11 @@ function TweetCard(props) {
       </div>
       <div className="tweet-body">
         <div style={{ flexGrow: 1 }}>
-          <textarea
+          <TextareaAutosize
             className="tweet-content"
-            style={{ borderColor: editing ? "black" : "transparent" }}
+            style={{
+              borderColor: editing ? "black" : "transparent",
+            }}
             value={content}
             onChange={e => setContent(e.target.value)}
             disabled={!editing}

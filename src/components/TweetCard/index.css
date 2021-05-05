@@ -27,7 +27,9 @@
   width: 100%;
   border-color: transparent;
   background-color: transparent;
+  border-radius: 5px;
   outline: none;
+  resize: none;
 }
 
 .tweet-actions {

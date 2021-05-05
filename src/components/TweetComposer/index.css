@@ -10,6 +10,12 @@
   padding: 10px;
 }
 
+.tweet-composer {
+  resize: none;
+  border-color: black;
+  border-radius: 5px;
+}
+
 .tweet-button {
   margin-top: 10px;
   align-self: flex-end;

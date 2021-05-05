@@ -1,6 +1,7 @@
 
 import React, { useState } from "react";
 import PropTypes from 'prop-types';
+import TextareaAutosize from 'react-textarea-autosize';
 
 import Button from 'react-bootstrap/Button';
 
@@ -24,9 +25,11 @@ function TweetComposer(props) {
 
   return (
     <div className="composer-card">
-      <textarea
+      <TextareaAutosize
+        className="tweet-composer"
         placeholder="What's on your mind?"
         value={tweet}
+        minRows={2}
         onChange={e => {
           setTweet(e.target.value);
         }}

@@ -6,7 +6,6 @@ import TweetCard from './components/TweetCard';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
 function App() {
   const initialTweets = [
     {
@@ -56,7 +55,6 @@ function App() {
       return tweet;
     });
  
-    console.log("newList", newList)
     setTweets(newList);
   }
 
