@@ -1,0 +1,57 @@
+.tweet-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  width: 450px;
+  margin: 10px;
+  padding: 10px;
+}
+
+.tweet-header {
+  display: flex;
+  margin-bottom: 5px;
+}
+
+.tweet-user {
+  flex-grow: 1;
+  font-weight: bold;
+}
+
+.tweet-body {
+  display: flex;
+}
+
+.tweet-content {
+  width: 100%;
+  border-color: transparent;
+  background-color: transparent;
+  outline: none;
+}
+
+.tweet-actions {
+  align-items: flex-end;
+  display: flex;
+}
+
+.edit-icon, .delete-icon {
+  height: 18px;
+  width: 18px;
+  cursor: pointer;
+  will-change: transform;
+  transition: transform 450ms;
+}
+
+.save-icon {
+  height: 25px;
+  width: 25px;
+  cursor: pointer;
+  will-change: transform;
+  transition: transform 450ms;
+}
+
+.save-icon:hover, .delete-icon:hover, .edit-icon:hover {
+  transition: transform 125ms;
+  transform: translateY(-5px);
+}
