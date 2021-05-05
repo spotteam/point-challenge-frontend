@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Spinner } from 'react-bootstrap'
 
 import TweetComposer from './components/TweetComposer'
 import TweetCard from './components/TweetCard';
+
+import { fetchPosts } from './services/utils';
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -34,7 +37,17 @@ function App() {
     },
   ]
   
-  const [ tweets, setTweets ] = useState(initialTweets);
+  const [ tweets, setTweets ] = useState([]);
+  const [ user, setUser ] = useState({email: "", id: -1});
+  const [ loading, setLoading ] = useState(true);
+
+  useEffect(() => {
+    if (loading) {
+      setUser({email: "saadnsyed@gmail.com", id: 5}); // TODO fetch this properly
+      fetchPosts(5, setTweets); // TODO fetch actual user id from login
+      setLoading(false);
+    }
+  });
 
   const addTweetToList = tweet => setTweets(state => [tweet, ...state])
   const deleteTweet = id => {
@@ -61,22 +74,30 @@ function App() {
   return (
     <div>
       <div className="product-container">
-        <TweetComposer addTweetToList={addTweetToList}/>
-        <div>
-          {tweets.map((tweet) => {
-            return (
-              <TweetCard
-                key={tweet.id}
-                id={tweet.id}
-                content={tweet.content}
-                user={tweet.user}
-                createdAt={tweet.createdAt}
-                deleteTweet={deleteTweet}
-                updateTweet={updateTweet}
-              />
-            );
-          })}
-        </div>
+        <TweetComposer
+          userId={user.id}
+          addTweetToList={addTweetToList}
+        />
+        {loading
+          ?
+            <Spinner animation="border" variant="primary" />
+          :
+            <div>
+              {tweets.map((tweet) => {
+                return (
+                  <TweetCard
+                    key={tweet.id}
+                    id={tweet.id}
+                    content={tweet.content}
+                    user={user.email}
+                    createdAt={tweet.createdAt}
+                    deleteTweet={deleteTweet}
+                    updateTweet={updateTweet}
+                  />
+                );
+              })}
+            </div>
+        }
       </div>
     </div>
   );

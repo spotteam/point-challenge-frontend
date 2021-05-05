@@ -74,7 +74,7 @@ TweetCard.propTypes = {
   id: PropTypes.number.isRequired,
   content: PropTypes.string.isRequired,
   user: PropTypes.string.isRequired,
-  createdAt: PropTypes.number.isRequired,
+  createdAt: PropTypes.string.isRequired,
   deleteTweet: PropTypes.func.isRequired,
   updateTweet: PropTypes.func.isRequired,
 }

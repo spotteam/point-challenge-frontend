@@ -2,8 +2,9 @@
 import React, { useState } from "react";
 import PropTypes from 'prop-types';
 import TextareaAutosize from 'react-textarea-autosize';
-
 import Button from 'react-bootstrap/Button';
+
+import { createPost } from '../../services/utils';
 
 import './index.css'
 
@@ -14,12 +15,7 @@ function TweetComposer(props) {
   const handleSubmit = e => {
     e.preventDefault();
     console.log(tweet);
-    props.addTweetToList({
-      id: Date.now(), // TODO change this to id from backend
-      createdAt: Date.now(),
-      user: "saadnsyed",
-      content: tweet,
-    });
+    createPost(props.userId, tweet, props.addTweetToList);
     setTweet("");
   }
 
@@ -47,6 +43,7 @@ function TweetComposer(props) {
 
 TweetComposer.propTypes = {
   addTweetToList: PropTypes.func.isRequired,
+  userId: PropTypes.number.isRequired,
 }
 
 export default TweetComposer;
