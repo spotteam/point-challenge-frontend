@@ -86,6 +86,8 @@ function App() {
                 <Button variant="primary" onClick={() => {
                   window.localStorage.removeItem('jwt');
                   setToken(null);
+                  setTweets([]);
+                  setUser("");
                 }}>
                   Log Out
                 </Button>
