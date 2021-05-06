@@ -129,8 +129,8 @@ export const login = (email, password, setJwt) => {
     body: JSON.stringify({email: email, password: password})
   })
     .then(r => {
-      if (r.status != 200) {
-        // error handle
+      if (r.status === 400) {
+        // password/email wrong, set error message
       }
       return r.json()
     })
