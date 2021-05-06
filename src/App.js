@@ -13,49 +13,30 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 function App() {
 
   const [ tweets, setTweets ] = useState([]);
-  const [ user, setUser ] = useState({email: "", id: -1});
+  const [ user, setUser ] = useState("");
   const [ loading, setLoading ] = useState(true);
   const [ loggedIn, setLoggedIn ] = useState(false);
   const [ token, setToken ] = useState(null);
 
-  const initialize = (token) => {
-    setLoggedIn(true);
-    setToken(token);
-    setUser({email: "saadnsyed@gmail.com", id: 5}); // TODO fetch this properly
-    fetchPosts(token, setTweets); // TODO fetch actual user id from login
-  }
-
   useEffect(() => {
-    if (loading) {
-      // fetch existing login token
-      const token = window.localStorage.getItem('jwt');
-      console.log('token in useffect', token)
-      console.log(token == undefined)
-      if (token !== undefined && token !== null) {
-        console.log('going through sign up flow')
-        // TODO validate token by attemping to fetch posts
-
-        // as a first step, assume this means we are logged in and good to go
-        initialize(token);
-      } else {
-        // go through sign up flow
-      }
-
+    // fetch existing login token
+    const token = window.localStorage.getItem('jwt');
+    if (token !== undefined && token !== null) {
+      // attempt to fetch posts, if we fail then stop loading and force login
+      fetchPosts(token, (success, tweets=null, email=null) => {
+        if (success === true && tweets !== null && email !== null) {
+          setToken(token);
+          setTweets(tweets);
+          setUser(email);
+          setLoggedIn(true);
+        }
+        setLoading(false);
+      })
+    } else {
+      // no token in local memory, need to login
       setLoading(false);
     }
   }, []);
-
-  // componenDidMount() {
-  //   check if a jwt exists in cookies
-  //   if it exist, login
-  //     if login fails, signup
-
-  //   if it doesnt exist, signup
-  //     then login
-
-  //   after login
-  //     render feed view
-  // }
 
   // Add new tweet to the start of the list
   const addTweetToList = tweet => setTweets(state => [tweet, ...state]);
@@ -94,11 +75,15 @@ function App() {
                 <Nav className="mr-auto"></Nav>
                 <Button variant="primary" onClick={() => {
                   window.localStorage.removeItem('jwt');
+                  setToken(null);
                   setLoggedIn(false);
                 }}>
                   Log Out
                 </Button>
               </Navbar>
+              <div className="header-text">
+                Twitter Clone - by Eswar and Saad
+              </div>
               <TweetComposer
                 token={token}
                 addTweetToList={addTweetToList}
@@ -111,7 +96,7 @@ function App() {
                       id={tweet.id}
                       content={tweet.content}
                       token={token}
-                      userName={user.email}
+                      userName={user}
                       createdAt={tweet.createdAt}
                       deleteTweet={deleteTweet}
                       updateTweet={updateTweet}
@@ -121,7 +106,17 @@ function App() {
               </div>
             </div>
           :
-            <SignUp initialize={initialize}/>
+            <SignUp initialize={token => {
+                setToken(token);
+                fetchPosts(token, (success, tweets=null, email=null) => {
+                  if (success === true && tweets !== null && email !== null) {
+                    setTweets(tweets);
+                    setUser(email);
+                  }
+                });
+                setLoggedIn(true);
+              }}
+            />
       }
     </div>
   );

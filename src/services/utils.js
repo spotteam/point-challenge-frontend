@@ -1,6 +1,5 @@
 const fetchGraphQLJSONResponse = (token, query, variables) => {
   const graphqlUrl = "http://localhost:8080/secure/graphql";
-  console.log('AUTH TOKEN', token)
   return fetch(graphqlUrl, {
     method: 'POST',
     headers: {
@@ -15,26 +14,36 @@ const fetchGraphQLJSONResponse = (token, query, variables) => {
   }).then(r => r.json());
 }
 
-export const fetchPosts = (token, setTweets) => {
+export const fetchPosts = (token, callback) => {
   const query = `
-    query Posts {
+    query {
       posts {
         id
         createdAt
         content
+      }
+      user {
+        email
       }
     }
   `;
 
   fetchGraphQLJSONResponse(token, query, {})
     .then(data => {
-      console.log('fetch posts response', data)
-      if (data !== undefined && data.data !== undefined && data.data.posts !== undefined) {
-        setTweets(data.data.posts.reverse());
+      if (
+        data !== undefined &&
+        data.data !== undefined &&
+        data.data.posts !== undefined &&
+        data.data.user !== undefined &&
+        data.data.user.email !== undefined
+      ) {
+        callback(true, data.data.posts.reverse(), data.data.user.email);
+      } else {
+        callback(false);
       }
     })
     .catch(e => {
-      console.log('fetch post errored out', e)
+      callback(false);
     });
 }
 
@@ -101,7 +110,6 @@ export const signUp = (email, password, setJwt) => {
     body: JSON.stringify({email: email, password: password})
   })
     .then(r => {
-      console.log(r)
       if (r.status !== 200) {
         // error handle
       } else {
@@ -127,7 +135,8 @@ export const login = (email, password, setJwt) => {
       return r.json()
     })
     .then(data => {
-      console.log('data from login', data)
-      setJwt(data['token'])
+      if (data !== undefined && data.token !== undefined) {
+        setJwt(data['token']);
+      }
     })
 }
