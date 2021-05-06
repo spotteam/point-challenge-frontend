@@ -1,3 +1,44 @@
+export const signUp = (email, password, setJwt) => {
+  const signupUrl = "http://localhost:8080/signup"
+  fetch(signupUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    },
+    body: JSON.stringify({email: email, password: password})
+  })
+    .then(r => {
+      console.log(r)
+      if (r.status !== 200) {
+        // error handle
+      } else {
+        login(email, password, setJwt)
+      }
+    })
+}
+
+export const login = (email, password, setJwt) => {
+  const loginUrl = "http://localhost:8080/login"
+  fetch(loginUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    },
+    body: JSON.stringify({email: email, password: password})
+  })
+    .then(r => {
+      if (r.status != 200) {
+        // error handle
+      }
+      return r.json()
+    })
+    .then(data => {
+      setJwt(data['token'])
+    })
+}
+
 export const fetchPosts = (userId, setTweets) => {
   const graphqlUrl = "http://localhost:8080/graphql"
   console.log(graphqlUrl)
