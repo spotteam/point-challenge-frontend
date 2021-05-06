@@ -6,7 +6,7 @@
  * @returns A promise resolving the graphql response to JSON
  */
 const fetchGraphQLJSONResponse = (token, query, variables) => {
-  const graphqlUrl = "http://localhost:8080/secure/graphql";
+  const graphqlUrl = process.env.REACT_APP_BACKEND_URI + '/secure/graphql';
   return fetch(graphqlUrl, {
     method: 'POST',
     headers: {
@@ -155,7 +155,7 @@ export const deletePost = (token, postId, deleteTweet) => {
  * in state and fetch posts if successful.
  */
 export const signUp = (email, password, setJwt) => {
-  const signupUrl = "http://localhost:8080/signup"
+  const signupUrl = process.env.REACT_APP_BACKEND_URI + "/signup"
   fetch(signupUrl, {
     method: 'POST',
     headers: {
@@ -182,7 +182,7 @@ export const signUp = (email, password, setJwt) => {
  * in state and fetch posts if successful.
  */
 export const login = (email, password, setJwt) => {
-  const loginUrl = "http://localhost:8080/login"
+  const loginUrl = process.env.REACT_APP_BACKEND_URI + "/login"
   fetch(loginUrl, {
     method: 'POST',
     headers: {
