@@ -10,33 +10,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
-  const initialTweets = [
-    {
-      id: 0,
-      createdAt: 1620175459279,
-      user: "saadnsyed",
-      content: "Star wars is dope",
-    },
-    {
-      id: 1,
-      createdAt: 1620175505184,
-      user: "saadnsyed",
-      content: "I like fish",
-    },
-    {
-      id: 2,
-      createdAt: 1620175509878,
-      user: "saadnsyed",
-      content: "Curry is going offfff",
-    },
-    {
-      id: 3,
-      createdAt: 1620175515369,
-      user: "saadnsyed",
-      content: "Whos tryna hoop this weekend??",
-    },
-  ]
-  
+
   const [ tweets, setTweets ] = useState([]);
   const [ user, setUser ] = useState({email: "", id: -1});
   const [ loading, setLoading ] = useState(true);
@@ -49,27 +23,30 @@ function App() {
     }
   });
 
-  const addTweetToList = tweet => setTweets(state => [tweet, ...state])
-  const deleteTweet = id => {
-    const newList = tweets.filter((tweet) => tweet.id !== id);
-    setTweets(newList);
-  }
-  const updateTweet = (id, content) => {
-    const newList = tweets.map((tweet) => {
+  // Add new tweet to the start of the list
+  const addTweetToList = tweet => setTweets(state => [tweet, ...state]);
+
+  // Filter tweets to remove the one with the specified id
+  const deleteTweet = id =>
+    setTweets(tweets.filter((tweet) => tweet.id !== id));
+
+  // Find the specified tweet and update its content
+  // In the future we could support updating the timestamp
+  // or any other metadata associated with the tweet
+  const updateTweet = (id, content) => setTweets(
+      tweets.map((tweet) => {
       if (tweet.id === id) {
         const updatedTweet = {
           ...tweet,
           content: content,
         };
- 
+
         return updatedTweet;
       }
- 
+
       return tweet;
-    });
- 
-    setTweets(newList);
-  }
+    })
+  );
 
   return (
     <div>
@@ -89,7 +66,8 @@ function App() {
                     key={tweet.id}
                     id={tweet.id}
                     content={tweet.content}
-                    user={user.email}
+                    userId={user.id}
+                    userName={user.email}
                     createdAt={tweet.createdAt}
                     deleteTweet={deleteTweet}
                     updateTweet={updateTweet}

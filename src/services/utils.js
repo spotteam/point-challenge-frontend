@@ -1,37 +1,6 @@
-export const fetchPosts = (userId, setTweets) => {
-  const graphqlUrl = "http://localhost:8080/graphql"
-  console.log(graphqlUrl)
-  fetch(graphqlUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    },
-    body: JSON.stringify({query: "{ posts(userId: " + userId + ") { id createdAt content } }"})
-  })
-    .then(r => r.json())
-    .then(data => {
-      console.log('data returned:', data)
-      console.log(data.data.posts)
-      if (data !== undefined && data.data !== undefined && data.data.posts !== undefined) {
-        console.log('populating posts')
-        setTweets(data.data.posts.reverse())
-      }
-    });
-}
-
-export const createPost = (userId, content, addTweetToList) => {
-  const graphqlUrl = "http://localhost:8080/graphql"
-  console.log(graphqlUrl)
-
-  var query = `mutation CreatePost($userId: Int, $content: String) {
-    createPost(userId: $userId, content: $content) {
-      id
-      createdAt
-      content
-    }
-  }`;
-  fetch(graphqlUrl, {
+const fetchGraphQLJSONResponse = (query, variables) => {
+  const graphqlUrl = "http://localhost:8080/graphql";
+  return fetch(graphqlUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -39,25 +8,81 @@ export const createPost = (userId, content, addTweetToList) => {
     },
     body: JSON.stringify({
       query,
-      variables: {
-        userId: userId,
-        content: content,
-      }
+      variables,
     })
-  })
-    .then(r => r.json())
-    .then(data => {
-      console.log('data returned:', data)
-      console.log(data.data.createPost)
-      if (data !== undefined && data.data !== undefined && data.data.createPost !== undefined) {
-        console.log('adding post')
-        addTweetToList(data.data.createPost)
+  }).then(r => r.json());
+}
+
+export const fetchPosts = (userId, setTweets) => {
+  const query = `
+    query Posts($userId: Int) {
+      posts(userId: $userId) {
+        id
+        createdAt
+        content
       }
-      // props.addTweetToList({
-      //   id: Date.now(), // TODO change this to id from backend
-      //   createdAt: Date.now(),
-      //   user: "saadnsyed",
-      //   content: tweet,
-      // });
+    }
+  `;
+
+  fetchGraphQLJSONResponse(query, { userId: userId })
+    .then(data => {
+      if (data !== undefined && data.data !== undefined && data.data.posts !== undefined) {
+        setTweets(data.data.posts.reverse());
+      }
+    });
+}
+
+export const createPost = (userId, content, addTweetToList) => {
+  const query = `mutation CreatePost($userId: Int, $content: String) {
+    createPost(userId: $userId, content: $content) {
+      id
+      createdAt
+      content
+    }
+  }`;
+
+  fetchGraphQLJSONResponse(query, {
+    userId: userId,
+    content: content,
+  })
+    .then(data => {
+      if (data !== undefined && data.data !== undefined && data.data.createPost !== undefined) {
+        addTweetToList(data.data.createPost);
+      }
+    });
+}
+
+export const editPost = (userId, postId, content, updateTweet) => {
+  const query = `mutation EditPost($userId: Int, $postId: Int, $content: String) {
+    editPost(userId: $userId, postId: $postId, content: $content) {
+      id
+      createdAt
+      content
+    }
+  }`;
+
+  fetchGraphQLJSONResponse(query, {
+    userId: userId,
+    postId: postId,
+    content: content,
+  })
+    .then(data => {
+      if (data !== undefined && data.data !== undefined && data.data.editPost !== undefined) {
+        updateTweet(postId, data.data.editPost.content);
+      }
+    });
+}
+
+export const deletePost = (userId, postId, deleteTweet) => {
+  const query = `mutation DeletePost($userId: Int, $postId: Int) {
+    deletePost(userId: $userId, postId: $postId)
+  }`;
+
+  fetchGraphQLJSONResponse(query, {
+    userId: userId,
+    postId: postId,
+  })
+    .then(_data => {
+      deleteTweet(postId);
     });
 }

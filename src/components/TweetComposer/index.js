@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 
 import { createPost } from '../../services/utils';
 
-import './index.css'
+import './index.css';
 
 function TweetComposer(props) {
 
@@ -14,7 +14,6 @@ function TweetComposer(props) {
 
   const handleSubmit = e => {
     e.preventDefault();
-    console.log(tweet);
     createPost(props.userId, tweet, props.addTweetToList);
     setTweet("");
   }

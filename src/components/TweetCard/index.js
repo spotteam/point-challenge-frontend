@@ -3,10 +3,11 @@ import React, { useState } from "react";
 import PropTypes from 'prop-types';
 import TextareaAutosize from 'react-textarea-autosize';
 
+import { editPost, deletePost } from '../../services/utils';
+
 import { ReactComponent as TrashIcon } from '../../assets/noun_Trash_3775172.svg';
 import { ReactComponent as EditIcon } from '../../assets/noun_note_3774598.svg';
 import { ReactComponent as SaveIcon } from '../../assets/noun_Save_3560739.svg';
-
 
 import './index.css';
 
@@ -19,7 +20,7 @@ function TweetCard(props) {
     <div className="tweet-card">
       <div className="tweet-header">
         <div className="tweet-user">
-          {props.user}
+          {props.userName}
         </div>
         <div>
           {(new Date(props.createdAt)).toLocaleString()}
@@ -44,8 +45,7 @@ function TweetCard(props) {
                 className="save-icon"
                 style={{ marginRight: '5px' }}
                 onClick={e => {
-                  props.updateTweet(props.id, content);
-                  console.log('submitted update!!')
+                  editPost(props.userId, props.id, content, props.updateTweet);
                   setEditing(false);
                 }}
               />
@@ -61,7 +61,7 @@ function TweetCard(props) {
           <TrashIcon
             className="delete-icon"
             onClick={e => {
-              props.deleteTweet(props.id);
+              deletePost(props.userId, props.id, props.deleteTweet);
             }}
           />
         </div>
@@ -73,7 +73,8 @@ function TweetCard(props) {
 TweetCard.propTypes = {
   id: PropTypes.number.isRequired,
   content: PropTypes.string.isRequired,
-  user: PropTypes.string.isRequired,
+  userName: PropTypes.string.isRequired,
+  userId: PropTypes.number.isRequired,
   createdAt: PropTypes.string.isRequired,
   deleteTweet: PropTypes.func.isRequired,
   updateTweet: PropTypes.func.isRequired,

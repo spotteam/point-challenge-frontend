@@ -55,5 +55,5 @@
 
 .save-icon:hover, .delete-icon:hover, .edit-icon:hover {
   transition: transform 125ms;
-  transform: translateY(-5px);
+  transform: translateY(-3px);
 }
