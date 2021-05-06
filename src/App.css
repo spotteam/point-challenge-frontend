@@ -4,10 +4,40 @@
   align-items: center;
   flex-direction: column;
   height: 100%;
+  width: 100%;
+  padding-left: 8px;
+  padding-right: 8px;;
 }
 
 .header-text {
+  margin-top: 15px;
+  margin-bottom: 10px;
   font-weight: bold;
   font-size: 1.5em;
-  margin-left: 12px;
+}
+
+.logged-in-text {
+  max-width: 100%;
+  justify-content: center;
+  margin-bottom: 10px;
+  overflow-wrap: break-word;
+}
+
+.container-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  width: 100%;
+  max-width: 450px;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.tweet-feed, .feed-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

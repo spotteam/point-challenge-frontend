@@ -16,7 +16,7 @@ function TweetCard(props) {
   const [content, setContent] = useState(props.content);
 
   return (
-    <div className="tweet-card">
+    <div className="container-card">
       <div className="tweet-header">
         <div className="tweet-user">
           {props.userName}

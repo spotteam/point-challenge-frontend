@@ -14,3 +14,13 @@
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
 }
+
+.button-row {
+  display: flex;
+  align-items: center;
+}
+
+.auth-fail-text {
+  color: red;
+  margin-left: 10px;
+}

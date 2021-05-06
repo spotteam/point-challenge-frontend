@@ -7,23 +7,27 @@ import { signUp, login } from '../../services/utils';
 import './index.css';
 
 function SignUp(props) {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [authFail, setAuthFail] = useState(false);
+
+  const authCallback = (success, jwt=null) => {
+    if (success === true && jwt !== null) {
+      window.localStorage.setItem('jwt', jwt);
+      props.initialize(jwt);
+    } else {
+      setAuthFail(true);
+    }
+  }
 
   const submitSignUp = (e) => {
     e.preventDefault()
-    signUp(email, password, (jwt) => {
-      window.localStorage.setItem('jwt', jwt);
-      props.initialize(jwt);
-    })
+    signUp(email, password, authCallback)
   }
 
   const submitLogin = (e) => {
     e.preventDefault()
-    login(email, password, (jwt) => {
-      window.localStorage.setItem('jwt', jwt);
-      props.initialize(jwt);
-    })
+    login(email, password, authCallback)
   }
 
   return (
@@ -47,9 +51,16 @@ function SignUp(props) {
                 onChange={e => setPassword(e.target.value)}
               />
             </Form.Group>
-            <Button variant="primary" type="submit">
-              Sign Up
-            </Button>
+            <div className="button-row">
+              <Button variant="primary" type="submit">
+                Sign Up
+              </Button>
+              {authFail &&
+                <div className="auth-fail-text">
+                  Authentication failed
+                </div>
+              }
+            </div>
           </Form>
         </Tab>
         <Tab eventKey="login" title="Log In">
@@ -70,9 +81,16 @@ function SignUp(props) {
                 onChange={e => setPassword(e.target.value)}
               />
             </Form.Group>
-            <Button variant="primary" type="submit">
-              Log In
-            </Button>
+            <div className="button-row">
+              <Button variant="primary" type="submit">
+                Log In
+              </Button>
+              {authFail &&
+                <div className="auth-fail-text">
+                  Authentication failed
+                </div>
+              }
+            </div>
           </Form>
         </Tab>
       </Tabs>

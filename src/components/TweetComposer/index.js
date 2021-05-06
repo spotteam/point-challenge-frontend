@@ -19,7 +19,7 @@ function TweetComposer(props) {
   }
 
   return (
-    <div className="composer-card">
+    <div className="container-card">
       <TextareaAutosize
         className="tweet-composer"
         placeholder="What's on your mind?"

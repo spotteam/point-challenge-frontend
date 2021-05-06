@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Spinner, Navbar, Nav, Button } from 'react-bootstrap';
+import { Spinner, Button } from 'react-bootstrap';
 
 import TweetComposer from './components/TweetComposer';
 import TweetCard from './components/TweetCard';
@@ -80,26 +80,30 @@ function App() {
           <Spinner animation="border" variant="primary" />
         : token !== null
           ?
-            <div>
-              <Navbar style={{ alignItems: 'flex-start' }} fixed="top">
-                <Nav className="mr-auto"></Nav>
-                <Button variant="primary" onClick={() => {
+            <div className="feed-container">
+              <div className="header-text">
+                Twitter2 - Eswar and Saad
+              </div>
+              <div className="logged-in-text">
+                Logged in as {user}
+              </div>
+              <Button
+                variant="primary"
+                style={{ marginBottom: '15px' }}
+                onClick={() => {
                   window.localStorage.removeItem('jwt');
                   setToken(null);
                   setTweets([]);
                   setUser("");
-                }}>
+                }}
+              >
                   Log Out
                 </Button>
-              </Navbar>
-              <div className="header-text">
-                Twitter Clone - by Eswar and Saad
-              </div>
               <TweetComposer
                 token={token}
                 addTweetToList={addTweetToList}
               />
-              <div>
+              <div className="tweet-feed">
                 {tweets.map((tweet) => {
                   return (
                     <TweetCard

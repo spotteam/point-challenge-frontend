@@ -154,7 +154,7 @@ export const deletePost = (token, postId, deleteTweet) => {
  * Posts to the backend signup endpoint and fires a callback to save the token
  * in state and fetch posts if successful.
  */
-export const signUp = (email, password, setJwt) => {
+export const signUp = (email, password, callback) => {
   const signupUrl = process.env.REACT_APP_BACKEND_URI + "/signup"
   fetch(signupUrl, {
     method: 'POST',
@@ -167,8 +167,9 @@ export const signUp = (email, password, setJwt) => {
     .then(r => {
       if (r.status !== 200) {
         // Log this error in the future.
+        callback(false);
       } else {
-        login(email, password, setJwt);
+        login(email, password, callback);
       }
     });
 }
@@ -181,7 +182,7 @@ export const signUp = (email, password, setJwt) => {
  * Posts to the backend login endpoint and fires a callback to save the token
  * in state and fetch posts if successful.
  */
-export const login = (email, password, setJwt) => {
+export const login = (email, password, callback) => {
   const loginUrl = process.env.REACT_APP_BACKEND_URI + "/login"
   fetch(loginUrl, {
     method: 'POST',
@@ -192,7 +193,7 @@ export const login = (email, password, setJwt) => {
     body: JSON.stringify({email: email, password: password})
   })
     .then(r => {
-      if (r.status === 400) {
+      if (r.status !== 200) {
         // Log this error in the future.
         // Typically this fires when the email/password is wrong.
       }
@@ -200,7 +201,9 @@ export const login = (email, password, setJwt) => {
     })
     .then(data => {
       if (data !== undefined && data.token !== undefined) {
-        setJwt(data['token']);
+        callback(true, data['token']);
+      } else {
+        callback(false);
       }
     })
 }
