@@ -1,0 +1,28 @@
+{
+  "files": {
+    "main.css": "/point-challenge-frontend/static/css/main.0d818178.chunk.css",
+    "main.js": "/point-challenge-frontend/static/js/main.c5be7fb8.chunk.js",
+    "main.js.map": "/point-challenge-frontend/static/js/main.c5be7fb8.chunk.js.map",
+    "runtime-main.js": "/point-challenge-frontend/static/js/runtime-main.d7f3a0c4.js",
+    "runtime-main.js.map": "/point-challenge-frontend/static/js/runtime-main.d7f3a0c4.js.map",
+    "static/css/2.150d169a.chunk.css": "/point-challenge-frontend/static/css/2.150d169a.chunk.css",
+    "static/js/2.be655a52.chunk.js": "/point-challenge-frontend/static/js/2.be655a52.chunk.js",
+    "static/js/2.be655a52.chunk.js.map": "/point-challenge-frontend/static/js/2.be655a52.chunk.js.map",
+    "static/js/3.c2986ea8.chunk.js": "/point-challenge-frontend/static/js/3.c2986ea8.chunk.js",
+    "static/js/3.c2986ea8.chunk.js.map": "/point-challenge-frontend/static/js/3.c2986ea8.chunk.js.map",
+    "index.html": "/point-challenge-frontend/index.html",
+    "static/css/2.150d169a.chunk.css.map": "/point-challenge-frontend/static/css/2.150d169a.chunk.css.map",
+    "static/css/main.0d818178.chunk.css.map": "/point-challenge-frontend/static/css/main.0d818178.chunk.css.map",
+    "static/js/2.be655a52.chunk.js.LICENSE.txt": "/point-challenge-frontend/static/js/2.be655a52.chunk.js.LICENSE.txt",
+    "static/media/noun_Save_3560739.0e5d798b.svg": "/point-challenge-frontend/static/media/noun_Save_3560739.0e5d798b.svg",
+    "static/media/noun_Trash_3775172.2180af41.svg": "/point-challenge-frontend/static/media/noun_Trash_3775172.2180af41.svg",
+    "static/media/noun_note_3774598.d8075d22.svg": "/point-challenge-frontend/static/media/noun_note_3774598.d8075d22.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.d7f3a0c4.js",
+    "static/css/2.150d169a.chunk.css",
+    "static/js/2.be655a52.chunk.js",
+    "static/css/main.0d818178.chunk.css",
+    "static/js/main.c5be7fb8.chunk.js"
+  ]
+}
