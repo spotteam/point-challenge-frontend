@@ -102,8 +102,8 @@ export const signUp = (email, password, setJwt) => {
   })
     .then(r => {
       console.log(r)
-      if (r.status !== 200) {
-        // error handle
+      if (r.status !== 400) {
+        // email already exists. set error message
       } else {
         login(email, password, setJwt)
       }
@@ -121,8 +121,8 @@ export const login = (email, password, setJwt) => {
     body: JSON.stringify({email: email, password: password})
   })
     .then(r => {
-      if (r.status != 200) {
-        // error handle
+      if (r.status === 400) {
+        // password/email wrong, set error message
       }
       return r.json()
     })
