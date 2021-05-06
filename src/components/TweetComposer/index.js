@@ -14,7 +14,7 @@ function TweetComposer(props) {
 
   const handleSubmit = e => {
     e.preventDefault();
-    createPost(props.userId, tweet, props.addTweetToList);
+    createPost(props.token, tweet, props.addTweetToList);
     setTweet("");
   }
 
@@ -42,7 +42,7 @@ function TweetComposer(props) {
 
 TweetComposer.propTypes = {
   addTweetToList: PropTypes.func.isRequired,
-  userId: PropTypes.number.isRequired,
+  token: PropTypes.string.isRequired,
 }
 
 export default TweetComposer;

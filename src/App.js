@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Spinner } from 'react-bootstrap'
+import { Spinner, Navbar, Nav, Button } from 'react-bootstrap';
 
-import TweetComposer from './components/TweetComposer'
+import TweetComposer from './components/TweetComposer';
 import TweetCard from './components/TweetCard';
+import SignUp from './components/SignUp';
 
-import { fetchPosts } from './services/utils';
+import { fetchPosts, login } from './services/utils';
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -14,14 +15,47 @@ function App() {
   const [ tweets, setTweets ] = useState([]);
   const [ user, setUser ] = useState({email: "", id: -1});
   const [ loading, setLoading ] = useState(true);
+  const [ loggedIn, setLoggedIn ] = useState(false);
+  const [ token, setToken ] = useState(null);
+
+  const initialize = (token) => {
+    setLoggedIn(true);
+    setToken(token);
+    setUser({email: "saadnsyed@gmail.com", id: 5}); // TODO fetch this properly
+    fetchPosts(token, setTweets); // TODO fetch actual user id from login
+  }
 
   useEffect(() => {
     if (loading) {
-      setUser({email: "saadnsyed@gmail.com", id: 5}); // TODO fetch this properly
-      fetchPosts(5, setTweets); // TODO fetch actual user id from login
+      // fetch existing login token
+      const token = window.localStorage.getItem('jwt');
+      console.log('token in useffect', token)
+      console.log(token == undefined)
+      if (token !== undefined && token !== null) {
+        console.log('going through sign up flow')
+        // TODO validate token by attemping to fetch posts
+
+        // as a first step, assume this means we are logged in and good to go
+        initialize(token);
+      } else {
+        // go through sign up flow
+      }
+
       setLoading(false);
     }
-  });
+  }, []);
+
+  // componenDidMount() {
+  //   check if a jwt exists in cookies
+  //   if it exist, login
+  //     if login fails, signup
+
+  //   if it doesnt exist, signup
+  //     then login
+
+  //   after login
+  //     render feed view
+  // }
 
   // Add new tweet to the start of the list
   const addTweetToList = tweet => setTweets(state => [tweet, ...state]);
@@ -49,34 +83,46 @@ function App() {
   );
 
   return (
-    <div>
-      <div className="product-container">
-        <TweetComposer
-          userId={user.id}
-          addTweetToList={addTweetToList}
-        />
-        {loading
+    <div className="product-container">
+      {loading
+        ?
+          <Spinner animation="border" variant="primary" />
+        : loggedIn
           ?
-            <Spinner animation="border" variant="primary" />
-          :
             <div>
-              {tweets.map((tweet) => {
-                return (
-                  <TweetCard
-                    key={tweet.id}
-                    id={tweet.id}
-                    content={tweet.content}
-                    userId={user.id}
-                    userName={user.email}
-                    createdAt={tweet.createdAt}
-                    deleteTweet={deleteTweet}
-                    updateTweet={updateTweet}
-                  />
-                );
-              })}
+              <Navbar style={{ alignItems: 'flex-start' }} fixed="top">
+                <Nav className="mr-auto"></Nav>
+                <Button variant="primary" onClick={() => {
+                  window.localStorage.removeItem('jwt');
+                  setLoggedIn(false);
+                }}>
+                  Log Out
+                </Button>
+              </Navbar>
+              <TweetComposer
+                token={token}
+                addTweetToList={addTweetToList}
+              />
+              <div>
+                {tweets.map((tweet) => {
+                  return (
+                    <TweetCard
+                      key={tweet.id}
+                      id={tweet.id}
+                      content={tweet.content}
+                      token={token}
+                      userName={user.email}
+                      createdAt={tweet.createdAt}
+                      deleteTweet={deleteTweet}
+                      updateTweet={updateTweet}
+                    />
+                  );
+                })}
+              </div>
             </div>
-        }
-      </div>
+          :
+            <SignUp initialize={initialize}/>
+      }
     </div>
   );
 }

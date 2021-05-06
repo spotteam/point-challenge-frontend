@@ -1,10 +1,12 @@
-const fetchGraphQLJSONResponse = (query, variables) => {
-  const graphqlUrl = "http://localhost:8080/graphql";
+const fetchGraphQLJSONResponse = (token, query, variables) => {
+  const graphqlUrl = "http://localhost:8080/secure/graphql";
+  console.log('AUTH TOKEN', token)
   return fetch(graphqlUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
+      'Authorization': "Bearer " + token,
     },
     body: JSON.stringify({
       query,
@@ -13,10 +15,10 @@ const fetchGraphQLJSONResponse = (query, variables) => {
   }).then(r => r.json());
 }
 
-export const fetchPosts = (userId, setTweets) => {
+export const fetchPosts = (token, setTweets) => {
   const query = `
-    query Posts($userId: Int) {
-      posts(userId: $userId) {
+    query Posts {
+      posts {
         id
         createdAt
         content
@@ -24,25 +26,28 @@ export const fetchPosts = (userId, setTweets) => {
     }
   `;
 
-  fetchGraphQLJSONResponse(query, { userId: userId })
+  fetchGraphQLJSONResponse(token, query, {})
     .then(data => {
+      console.log('fetch posts response', data)
       if (data !== undefined && data.data !== undefined && data.data.posts !== undefined) {
         setTweets(data.data.posts.reverse());
       }
+    })
+    .catch(e => {
+      console.log('fetch post errored out', e)
     });
 }
 
-export const createPost = (userId, content, addTweetToList) => {
-  const query = `mutation CreatePost($userId: Int, $content: String) {
-    createPost(userId: $userId, content: $content) {
+export const createPost = (token, content, addTweetToList) => {
+  const query = `mutation CreatePost($content: String) {
+    createPost(content: $content) {
       id
       createdAt
       content
     }
   }`;
 
-  fetchGraphQLJSONResponse(query, {
-    userId: userId,
+  fetchGraphQLJSONResponse(token, query, {
     content: content,
   })
     .then(data => {
@@ -52,17 +57,16 @@ export const createPost = (userId, content, addTweetToList) => {
     });
 }
 
-export const editPost = (userId, postId, content, updateTweet) => {
-  const query = `mutation EditPost($userId: Int, $postId: Int, $content: String) {
-    editPost(userId: $userId, postId: $postId, content: $content) {
+export const editPost = (token, postId, content, updateTweet) => {
+  const query = `mutation EditPost($postId: Int, $content: String) {
+    editPost(postId: $postId, content: $content) {
       id
       createdAt
       content
     }
   }`;
 
-  fetchGraphQLJSONResponse(query, {
-    userId: userId,
+  fetchGraphQLJSONResponse(token, query, {
     postId: postId,
     content: content,
   })
@@ -73,13 +77,12 @@ export const editPost = (userId, postId, content, updateTweet) => {
     });
 }
 
-export const deletePost = (userId, postId, deleteTweet) => {
-  const query = `mutation DeletePost($userId: Int, $postId: Int) {
-    deletePost(userId: $userId, postId: $postId)
+export const deletePost = (token, postId, deleteTweet) => {
+  const query = `mutation DeletePost($postId: Int) {
+    deletePost(postId: $postId)
   }`;
 
-  fetchGraphQLJSONResponse(query, {
-    userId: userId,
+  fetchGraphQLJSONResponse(token, query, {
     postId: postId,
   })
     .then(_data => {
@@ -104,7 +107,7 @@ export const signUp = (email, password, setJwt) => {
       } else {
         login(email, password, setJwt)
       }
-    })
+    });
 }
 
 export const login = (email, password, setJwt) => {
@@ -124,6 +127,7 @@ export const login = (email, password, setJwt) => {
       return r.json()
     })
     .then(data => {
+      console.log('data from login', data)
       setJwt(data['token'])
     })
 }

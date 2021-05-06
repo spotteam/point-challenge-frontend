@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import PropTypes from 'prop-types';
 import TextareaAutosize from 'react-textarea-autosize';
@@ -45,7 +44,7 @@ function TweetCard(props) {
                 className="save-icon"
                 style={{ marginRight: '5px' }}
                 onClick={e => {
-                  editPost(props.userId, props.id, content, props.updateTweet);
+                  editPost(props.token, props.id, content, props.updateTweet);
                   setEditing(false);
                 }}
               />
@@ -61,7 +60,7 @@ function TweetCard(props) {
           <TrashIcon
             className="delete-icon"
             onClick={e => {
-              deletePost(props.userId, props.id, props.deleteTweet);
+              deletePost(props.token, props.id, props.deleteTweet);
             }}
           />
         </div>
@@ -74,7 +73,7 @@ TweetCard.propTypes = {
   id: PropTypes.number.isRequired,
   content: PropTypes.string.isRequired,
   userName: PropTypes.string.isRequired,
-  userId: PropTypes.number.isRequired,
+  token: PropTypes.string.isRequired,
   createdAt: PropTypes.string.isRequired,
   deleteTweet: PropTypes.func.isRequired,
   updateTweet: PropTypes.func.isRequired,
