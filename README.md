@@ -22,7 +22,7 @@ src/
       * utils.js
       * This includes all the API calls to the backend
 
-## Run locally
+## How to Run
 
 ```
 npm install
